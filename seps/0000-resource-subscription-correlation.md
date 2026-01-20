@@ -3,7 +3,7 @@
 - **Status**: Draft
 - **Type**: Standards Track
 - **Created**: 2026-01-20
-- **Author(s)**: Peter Argany (@pja)
+- **Author(s)**: Peter Alexander (@Poita)
 - **Sponsor**: None (seeking sponsor)
 - **PR**: https://github.com/modelcontextprotocol/specification/pull/0000
 

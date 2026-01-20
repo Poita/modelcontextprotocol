@@ -9,13 +9,13 @@
 
 ## Abstract
 
-This SEP proposes adding a `subscribedUri` field to `ResourceUpdatedNotificationParams` to enable reliable correlation between resource update notifications and the subscriptions that triggered them. Currently, when a server sends a `notifications/resources/updated` notification, the `uri` field may refer to a sub-resource or related resource rather than the originally subscribed URI, making it difficult for clients to route updates to the correct subscription callback.
+This SEP formally clarifies that resource subscription update notifications may contain URIs different from the originally subscribed URI (a behavior currently implied by schema documentation but not specified in the protocol specification itself), and proposes adding a `subscribedUri` field to `ResourceUpdatedNotificationParams` to enable reliable correlation between these notifications and their triggering subscriptions. Without this correlation mechanism, clients cannot reliably route updates to the correct subscription callback when the notification URI differs from the subscribed URI.
 
 ## Motivation
 
 The MCP specification currently allows servers to send resource update notifications with URIs that differ from the originally subscribed URI. The schema documentation for `ResourceUpdatedNotificationParams.uri` explicitly states: "This might be a sub-resource of the one that the client actually subscribed to."
 
-While this flexibility is valuable for hierarchical and query-based resource patterns, it creates a significant problem: **clients cannot reliably determine which subscription triggered a given update notification**.
+While this flexibility is valuable for hierarchical and query-based resource patterns, it creates a problem: **clients cannot reliably determine which subscription triggered a given update notification**.
 
 ### Example Scenarios
 

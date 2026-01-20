@@ -143,12 +143,8 @@ Overloading `uri` to always contain the subscribed URI would lose this granulari
 
 ### Why make `subscribedUri` required?
 
-Making the field required ensures:
-1. Clients can rely on its presence without version checking
-2. Server implementations are forced to track subscription URIs
-3. The correlation problem is definitively solved for all compliant implementations
-
-The backward compatibility impact is acceptable (see below).
+* Once older versions of the specification are deprecated, clients will be able to rely on its presence
+* Implementation should be very straightforward, so SDK implementation burden is low
 
 ### Alternatives considered
 
@@ -169,27 +165,11 @@ The backward compatibility impact is acceptable (see below).
 
 ## Backward Compatibility
 
-This change adds a new required field to an existing notification type. The compatibility impact is as follows:
+This change adds a new field to an existing notification type.
 
-### Older clients with newer servers
+Older clients will ignore the `subscribedUri` field per standard JSON-RPC handling of unknown fields. Newer clients receiving notifications from older servers will see the same behavior they have today (no `subscribedUri` field present).
 
-Older clients that do not expect `subscribedUri` will receive it but should ignore unknown fields per standard JSON-RPC practices. This is the default behavior for most JSON parsing libraries and MCP implementations.
-
-### Newer clients with older servers
-
-Newer clients expecting `subscribedUri` will not receive it from older servers. Clients SHOULD:
-1. Check for the presence of `subscribedUri` in received notifications
-2. When absent, fall back to heuristic matching (e.g., prefix matching or exact match)
-3. Log warnings when heuristic matching is required, to encourage server upgrades
-
-### Migration path
-
-1. **Phase 1 (Immediate)**: Servers MAY begin sending `subscribedUri` in notifications
-2. **Phase 2 (Next spec version)**: `subscribedUri` becomes a required field in the schema
-3. **Phase 3 (Deprecation period)**: Clients warn when `subscribedUri` is absent
-4. **Phase 4 (Future)**: Clients may require `subscribedUri` and fail gracefully without it
-
-No capability negotiation is required. The field's presence serves as implicit feature detection.
+Note that matching update notifications to subscriptions is an application-layer concern. Applications must account for the potential absence of `subscribedUri` and continue to rely on whatever matching behavior they use today (e.g., exact URI match, prefix match, or other heuristics).
 
 ## Security Implications
 
@@ -208,9 +188,3 @@ A reference implementation will be provided in the TypeScript SDK that demonstra
 4. Fallback behavior for older servers
 
 The implementation should be straightforward as servers must already track subscriptions to know when to send notifications.
-
-## Open Questions
-
-1. Should `subscribedUri` be optional during a transition period, or required immediately in the next spec version?
-
-2. Should there be guidance on how servers should handle subscription URI normalization (e.g., trailing slashes, case sensitivity)?

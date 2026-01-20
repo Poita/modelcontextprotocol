@@ -3188,13 +3188,19 @@
                 "_meta": {
                     "$ref": "#/$defs/MetaObject"
                 },
+                "subscribedUri": {
+                    "description": "The URI that was originally passed to `resources/subscribe`. This allows clients\nto reliably correlate update notifications with their subscriptions, even when\nthe updated resource URI differs from the subscribed URI.",
+                    "format": "uri",
+                    "type": "string"
+                },
                 "uri": {
-                    "description": "The URI of the resource that has been updated. This might be a sub-resource of the one that the client actually subscribed to.",
+                    "description": "The URI of the resource that has been updated. This might be a sub-resource of\nthe one that the client actually subscribed to.",
                     "format": "uri",
                     "type": "string"
                 }
             },
             "required": [
+                "subscribedUri",
                 "uri"
             ],
             "type": "object"

@@ -2,6 +2,7 @@
   "jsonrpc": "2.0",
   "method": "notifications/resources/updated",
   "params": {
-    "uri": "file:///project/src/main.rs"
+    "uri": "file:///project/src/main.rs",
+    "subscribedUri": "file:///project/src/main.rs"
   }
 }

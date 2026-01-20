@@ -1091,15 +1091,28 @@ export interface UnsubscribeResultResponse extends JSONRPCResultResponse {
  * @example File resource updated
  * {@includeCode ./examples/ResourceUpdatedNotificationParams/file-resource-updated.json}
  *
+ * @example Sub-resource updated
+ * {@includeCode ./examples/ResourceUpdatedNotificationParams/sub-resource-updated.json}
+ *
  * @category `notifications/resources/updated`
  */
 export interface ResourceUpdatedNotificationParams extends NotificationParams {
   /**
-   * The URI of the resource that has been updated. This might be a sub-resource of the one that the client actually subscribed to.
+   * The URI of the resource that has been updated. This might be a sub-resource of
+   * the one that the client actually subscribed to.
    *
    * @format uri
    */
   uri: string;
+
+  /**
+   * The URI that was originally passed to `resources/subscribe`. This allows clients
+   * to reliably correlate update notifications with their subscriptions, even when
+   * the updated resource URI differs from the subscribed URI.
+   *
+   * @format uri
+   */
+  subscribedUri: string;
 }
 
 /**

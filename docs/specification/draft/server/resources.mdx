@@ -223,7 +223,7 @@ capability **SHOULD** send a notification:
 ### Subscriptions
 
 The protocol supports optional subscriptions to resource changes. Clients can subscribe
-to specific resources and receive notifications when they change:
+to specific resources and receive notifications when they change.
 
 **Subscribe Request:**
 
@@ -233,22 +233,38 @@ to specific resources and receive notifications when they change:
   "id": 4,
   "method": "resources/subscribe",
   "params": {
-    "uri": "file:///project/src/main.rs"
+    "uri": "file:///project/src"
   }
 }
 ```
 
 **Update Notification:**
 
+When a subscribed resource (or a related resource) changes, the server sends a notification:
+
 ```json
 {
   "jsonrpc": "2.0",
   "method": "notifications/resources/updated",
   "params": {
-    "uri": "file:///project/src/main.rs"
+    "uri": "file:///project/src/main.rs",
+    "subscribedUri": "file:///project/src"
   }
 }
 ```
+
+The notification includes two URI fields:
+
+- `uri`: The URI of the specific resource that changed. This **MAY** be different from
+  the originally subscribed URI—for example, a file within a subscribed directory, or a
+  message matching a subscribed query.
+- `subscribedUri`: The URI that was originally passed to `resources/subscribe`. This
+  allows clients to reliably correlate update notifications with their subscriptions,
+  even when the updated resource URI differs from the subscribed URI.
+
+If a single resource change affects multiple active subscriptions, the server **MUST**
+send a separate notification for each subscription, each with the appropriate
+`subscribedUri` value.
 
 ## Message Flow
 
